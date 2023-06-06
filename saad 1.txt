@@ -1,0 +1,232 @@
+
+
+1.Titanic Survival Prediction:
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Load the Titanic dataset
+data = pd.read_csv('titanic.csv')
+
+# Preprocess the data
+data = data[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Survived']]
+data['Sex'] = data['Sex'].map({'female': 0, 'male': 1})
+data = data.dropna()
+
+# Split the data into features and target variable
+X = data.drop('Survived', axis=1)
+y = data['Survived']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the logistic regression model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print('Accuracy:', accuracy)
+
+.........................................................................................................................
+
+
+2.Iris Flower Classification
+
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Load the Iris dataset
+iris = load_iris()
+
+# Create a dataframe from the dataset
+data = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+data['target'] = iris.target
+
+# Split the data into features and target variable
+X = data.drop('target', axis=1)
+y = data['target']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the k-nearest neighbors model
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print('Accuracy:', accuracy)
+
+........................................................................................................................
+
+3.Sentiment Analysis:
+
+import nltk
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+
+# Download the required NLTK resources
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+
+# Preprocess the text data
+# (Assuming you have a list of text documents called 'documents' and corresponding labels called 'labels')
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(documents)
+y = labels
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Naive Bayes classifier
+naive_bayes = MultinomialNB()
+
+# Train the model
+naive_bayes.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = naive_bayes.predict(X_test)
+
+# Evaluate the model
+accuracy = naive_bayes.score(X_test, y_test)
+print("Accuracy:", accuracy)
+
+.....................................................................................................................................................................................
+
+4.Image Classification:
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+
+# Set the path to the directory containing the training and validation images
+train_dir = 'train'
+valid_dir = 'valid'
+
+# Set the parameters for image preprocessing and augmentation
+train_datagen = ImageDataGenerator(
+    rescale=1./255,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True
+)
+
+valid_datagen = ImageDataGenerator(rescale=1./255)
+
+# Set the batch size and image dimensions
+batch_size = 32
+img_width, img_height = 224, 224
+
+# Create the training and validation generators
+train_generator = train_datagen.flow_from_directory(
+    train_dir,
+    target_size=(img_width, img_height),
+    batch_size=batch_size,
+    class_mode='categorical'
+)
+
+valid_generator = valid_datagen.flow_from_directory(
+    valid_dir,
+    target_size=(img_width, img_height),
+    batch_size=batch_size,
+    class_mode='categorical'
+)
+
+# Create the model
+model = Sequential()
+model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(img_width, img_height, 3)))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dense(train_generator.num_classes, activation='softmax'))
+
+# Compile the model
+model.compile(optimizer=Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Set up checkpoints and early stopping
+checkpoint = ModelCheckpoint('model.h5', monitor='val_accuracy', save_best_only=True, verbose=1)
+early_stopping = EarlyStopping(monitor='val_loss', patience=5, verbose=1)
+
+# Train the model
+history = model.fit(
+    train_generator,
+    steps_per_epoch=train_generator.samples // batch_size,
+    epochs=20,
+    validation_data=valid_generator,
+    validation_steps=valid_generator.samples // batch_size,
+    callbacks=[checkpoint, early_stopping]
+)
+
+# Evaluate the model
+score = model.evaluate(valid_generator)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+
+
+...............................................................................................................................
+
+
+5.Customer Segmentation:
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+# Load the customer data
+data = pd.read_csv('customer_data.csv')
+
+# Extract the relevant features for segmentation
+X = data[['Age', 'Annual Income']]
+
+# Standardize the features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Determine the optimal number of clusters using the elbow method
+wcss = []
+for i in range(1, 11):
+    kmeans = KMeans(n_clusters=i, random_state=42)
+    kmeans.fit(X_scaled)
+    wcss.append(kmeans.inertia_)
+
+# Plot the elbow curve
+plt.plot(range(1, 11), wcss)
+plt.title('Elbow Curve')
+plt.xlabel('Number of Clusters')
+plt.ylabel('WCSS')
+plt.show()
+
+# Perform K-means clustering with the optimal number of clusters
+kmeans = KMeans(n_clusters=4, random_state=42)
+kmeans.fit(X_scaled)
+
+# Assign cluster labels to the data
+data['Cluster'] = kmeans.labels_
+
+# Plot the clusters
+plt.scatter(data['Age'], data['Annual Income'], c=data['Cluster'], cmap='viridis')
+plt.title('Customer Segmentation')
+plt.xlabel('Age')
+plt.ylabel('Annual Income')
+plt.show()
+
+
+.............................................................................................................................
