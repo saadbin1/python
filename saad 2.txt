@@ -2,23 +2,3 @@
 name: saad bin abi waqas
 sap id: 24802
 
-Titanic Survival Prediction:
-Use the famous Titanic dataset to predict whether a passenger survived or not based on various features such as age, 
-gender, class, etc. You can use machine learning algorithms like logistic regression or decision trees for this project.
-
-Iris Flower Classification:
-Use the Iris flower dataset to classify different species of Iris flowers based on their petal and sepal dimensions.
- You can use algorithms like k-nearest neighbors or support vector machines for this project.
-
-Sentiment Analysis:
-Perform sentiment analysis on a collection of text data to determine whether the sentiment expressed is positive, 
-negative, or neutral. You can use pre-trained models like VADER or implement your own using techniques like bag-of-words or word embeddings.
-
-Image Classification:
-Build an image classification model to classify images into different categories. You can use popular deep learning 
-libraries like TensorFlow or PyTorch and pre-trained models like ResNet or VGGNet to accomplish this task.
-
-Customer Segmentation:
-Analyze customer data and segment them into different groups based on their demographics, behavior, or purchase history. 
-You can use clustering algorithms like k-means or hierarchical clustering for this project.
-.............................................................................................................................
